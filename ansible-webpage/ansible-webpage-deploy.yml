@@ -1,0 +1,41 @@
+---
+# Setup LAMP Stack
+-  hosts: host1
+   tasks:
+      - name: Install MySQL 5.7 repo
+        yum: name=http://dev.mysql.com/get/mysql57-community-release-el7-8.noarch.rpm state=present
+
+      - name: Install lamp stack
+        become: yes
+        yum:
+          name:
+            - httpd
+           # - mysql-server
+            - mysql-community-server 
+            - php
+            - php-mysql
+          state: present
+          update_cache: yes
+
+      -  name: start apache server
+         become: yes
+         service:
+              name: httpd
+              state: started
+              enabled: yes
+
+      -  name: start mysql service
+         become: yes
+         service:
+             name: mysql
+             state: started
+             enabled: yes
+
+      -  name:  create target directory
+         file: path=/var/www/html state=directory mode=0755
+
+      - name:  deploy index.html
+#        became: yes
+        copy:
+          src: ./index/index.html
+          dest: /var/www/html/index/index.html
