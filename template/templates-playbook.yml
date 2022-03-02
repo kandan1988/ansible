@@ -1,0 +1,7 @@
+---
+
+- name: install my_app configuration file from template
+  hosts: localhost
+  template:
+    src: my_app.conf.j2
+    dest: $HOME/my_app.conf
